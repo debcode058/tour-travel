@@ -5,11 +5,12 @@ exports.addtour = async(req,res)=>{
     try{
         const {title,price} = req.body;
         const newtour = new Tours({title,price});
-        await newtour;
-        res.json(newtour);
+        await newtour.save();
+        res.status(201).json(newtour);
     } 
     catch(err){
         console.error(err);
+        res.status(500).json({message:err.message});
     }
 }
 // view Tour

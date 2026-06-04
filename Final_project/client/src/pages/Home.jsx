@@ -19,7 +19,7 @@ const Home = () => {
     
   return <>
   <div>
-   {
+   {Array.isArray(tours) &&
     tours.map(x=>(
         <Tourcard
         key={x._id}
