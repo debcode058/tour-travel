@@ -8,6 +8,7 @@ const Tourcard = ({tour}) => {
       <div>
         <Link to={`/view/${tour._id}`}>View</Link>
         <Link to={`/edit/${tour._id}`}>Edit</Link>
+        <button>Delete</button>
       </div>
     </div>
   )
