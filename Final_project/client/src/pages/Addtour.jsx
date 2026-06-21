@@ -1,9 +1,11 @@
 import React,{useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Addtour = () => {
   const navigate = useNavigate();
+  const {token} = useAuth();
   const[form,setForm] = useState({
     title:"",
     price:"",
@@ -17,7 +19,14 @@ const Addtour = () => {
   const hs = async(e) => {
     e.preventDefault();
     try{
-      await axios.post("http://localhost:5000/api/tours",form);
+      await axios.post("http://localhost:5000/api/tours",
+      form,
+      {
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
       alert("Tour added successfully");
       navigate("/home");
     } catch(err){

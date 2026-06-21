@@ -4,7 +4,8 @@ const Tours = require("../models/Tour");
 exports.addtour = async(req,res)=>{
     try{
         const {title,price} = req.body;
-        const newtour = new Tours({title,price});
+        const image = req.file ? req.file.filename : "";
+        const newtour = new Tours({title,price,image,});
         await newtour.save();
         res.status(201).json(newtour);
     } 
@@ -35,8 +36,24 @@ exports.viewonetour = async (req,res)=>{
 exports.updatetour = async (req,res)=>{
     try{
         const {title,price} = req.body;
-        const newtour = await Tours.findByIdAndUpdate(req.params.id,{title,price},{new:true});
-        res.json(newtour);
+        let updateData = {
+            title,
+            price,
+        };
+        if(req.file){
+            updateData.image = req.file.filename;
+        }
+
+        const newtour = await Tours.findByIdAndUpdate(req.params.id,
+            updateData,
+            {
+                new:true
+            });
+        res.status(200).json({
+            success:true,
+            data:newtour,
+            message:"Tour Updated Successfully"
+        });
     } catch(err){
         console.error(err);
     }

@@ -4,18 +4,56 @@ import Home from './pages/Home'
 import Addtour from './pages/Addtour'
 import Viewtour from './pages/Viewtour'
 import Edittour from './pages/Edittour'
-import Navbar from './components/Navbar'
+import Navbar from "./components/Navbar"
+import {useAuth} from "./context/AuthContext"
+import { Navigate } from "react-router-dom";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+function AdminRoute({children}) {
+  const {user} = useAuth();
+  if(!user){
+    return <Navigate to="/login" />;
+  }
+  if(user.role !== "admin"){
+    return <Navigate to="/home"/>;
+  }
+  return children;
+}
 const App = () => {
   return <>
-  <BrowserRouter>
+   <BrowserRouter>
     <Navbar/>
     <Routes>
-      <Route path='/home' element={<Home/>}> </Route>
-      <Route path='/addtour' element={<Addtour/>}> </Route>
-      <Route path='/viewtour' element={<Viewtour/>} />
-      <Route path='/edittour' element={<Edittour/>} />
+      <Route path="/home" element={<Home />} />
+
+      <Route path="/register" element={<Register />} />
+
+      <Route path="/login" element={<Login />} />
+
+     <Route
+        path="/addtour"
+        element={
+        <AdminRoute>
+        <Addtour />
+        </AdminRoute>
+    }
+   />
+
+    <Route
+    path="/view/:id"
+    element={<Viewtour />}
+    />
+
+    <Route
+    path="/edit/:id"
+    element={
+      <AdminRoute>
+        <Edittour />
+      </AdminRoute>
+    }
+   />
     </Routes>
-  </BrowserRouter>
+   </BrowserRouter>
   </>
 }
 

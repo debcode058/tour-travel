@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 
 const locschema = new mongoose.Schema({
     title:String,
-    price:Number
+    price:Number,
+    image:String
 });
-module.exports = mongoose.model('location',locschema);
+
+module.exports = mongoose.model('Tour',locschema);
