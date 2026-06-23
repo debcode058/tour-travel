@@ -13,6 +13,7 @@ app.get("/",(req,res)=>{
 app.use('/api/tours',require("./routes/tourRoutes"));
 app.use('/api/auth',require("./routes/authroutes"));
 app.use("/uploads", express.static("uploads"));
+app.use("/api/cart", require("./routes/cartRoutes"));
 const port = process.env.PORT || 5000;
 
 app.listen(port,()=>{

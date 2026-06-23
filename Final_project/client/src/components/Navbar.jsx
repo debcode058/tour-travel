@@ -15,11 +15,12 @@ const handleLogout = ()=> {
 
 
   return <>
-  <div className='bg-green-700 shadow'>
+  <div className='bg-gray-700 shadow'>
     <div className='flex justify-between  p-4 container items-center mx-auto'>
         <Link to="/" className='text-white font-bold text-2xl mx-6'>Tour&Travel</Link>
         <div className='flex gap-3 text-white font-semibold text-lg '>
              <Link to="/home" className='hover:text-sky-400'>Home</Link>
+              <Link to="/cart" className='hover:text-sky-400'>Cart</Link>
              {user?.role === "admin" &&(
               <Link to="/addtour" className='hover:text-sky-400'>AddTour</Link>
              )}

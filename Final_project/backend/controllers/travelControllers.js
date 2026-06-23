@@ -4,8 +4,14 @@ const Tours = require("../models/Tour");
 exports.addtour = async(req,res)=>{
     try{
         const {title,price} = req.body;
-        const image = req.file ? req.file.filename : "";
-        const newtour = new Tours({title,price,image,});
+        const image = req.files?.image
+        ? req.files.image[0].filename
+        : "";
+
+        const video = req.files?.video
+        ? req.files.video[0].filename
+        : "";
+        const newtour = new Tours({title,price,image,video});
         await newtour.save();
         res.status(201).json(newtour);
     } 
@@ -40,8 +46,12 @@ exports.updatetour = async (req,res)=>{
             title,
             price,
         };
-        if(req.file){
-            updateData.image = req.file.filename;
+        if(req.files?.image){
+            updateData.image = req.files.image[0].filename;
+        }
+
+        if(req.files?.video){
+            updateData.video = req.files.video[0].filename;
         }
 
         const newtour = await Tours.findByIdAndUpdate(req.params.id,

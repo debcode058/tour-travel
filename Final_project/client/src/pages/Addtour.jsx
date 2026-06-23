@@ -6,25 +6,34 @@ import { useAuth } from '../context/AuthContext';
 const Addtour = () => {
   const navigate = useNavigate();
   const {token} = useAuth();
-  const[form,setForm] = useState({
-    title:"",
-    price:"",
-  });
-  const hc = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]:e.target.value
-    })
-  }
+  const [title,setTitle] = useState("");
+  const [price,setPrice] = useState("");
+  const [image,setImage] = useState(null);
+  const[video,setVideo] = useState(null);
+
+  // const hc = (e) => {
+    // setForm({
+      // ...form,
+      // [e.target.name]:e.target.value
+    // })
+  // }
+
+
   const hs = async(e) => {
     e.preventDefault();
+    const fromData = new FormData();
+    fromData.append("title",title);
+    fromData.append("price",price);
+    fromData.append("image",image);
+    fromData.append("video",video);
     try{
       await axios.post("http://localhost:5000/api/tours",
-      form,
+      fromData,
       {
         headers:{
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
       }
     );
       alert("Tour added successfully");
@@ -53,7 +62,7 @@ const Addtour = () => {
             <input
               type="text"
               name="title"
-              onChange={hc}
+              onChange={(e) => setTitle(e.target.value)}
               className="w-full border p-3 rounded"
               required
             />
@@ -69,9 +78,26 @@ const Addtour = () => {
             <input
               type="number"
               name="price"
-              onChange={hc}
+              onChange={(e) => setPrice(e.target.value)}
               className="w-full border p-3 rounded"
               required
+            />
+
+          </div>
+          <div>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImage(e.target.files[0])}
+              className="w-full border p-3 rounded"
+            />
+          </div>
+          <div>
+            <input
+              type="file"
+              accept="video/*"
+              onChange={(e) => setVideo(e.target.files[0])}
+              className="w-full border p-3 rounded"
             />
 
           </div>

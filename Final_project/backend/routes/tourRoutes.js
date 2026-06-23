@@ -4,17 +4,21 @@ const multer = require("multer");
 const router = express.Router();
 const controler = require("../controllers/travelControllers")
 
-
-//Image upload
+//image and video upload
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "uploads/");
+        if (file.fieldname === "video") {
+            cb(null, "uploads/videos/");
+        } else {
+            cb(null, "uploads/");
+        }
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + "-" + file.originalname);
     },
 });
-const upload = multer({ storage: storage });
+
+const upload = multer({ storage });
 
 //Auth check
 const authCheck = (req, res, next) => {
@@ -42,10 +46,16 @@ const adminCheck = (req, res, next) => {
     next();
 }
 //admin access/AddTour
-router.post("/",authCheck, adminCheck, upload.single("image"), controler.addtour);
+router.post("/",authCheck, adminCheck, upload.fields([
+        { name: "image", maxCount: 1 },
+        { name: "video", maxCount: 1 }
+    ]), controler.addtour);
 
 //update tour
-router.put("/:id",authCheck, adminCheck, upload.single("image"), controler.updatetour);
+router.put("/:id",authCheck, adminCheck, upload.fields([
+        { name: "image", maxCount: 1 },
+        { name: "video", maxCount: 1 }
+    ]), controler.updatetour);
 
 //delete tour
 router.delete("/:id",authCheck, adminCheck, controler.delettour);
